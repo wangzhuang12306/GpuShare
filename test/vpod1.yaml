@@ -1,0 +1,37 @@
+apiVersion: gpushare.imiss.gpushare/v1
+kind: VirtualPod
+metadata:
+  name: virtualpod1
+  annotations:
+    "gpushare/gpu_request": "0.4"
+    "gpushare/gpu_limit": "0.5"
+    "gpushare/gpu_memory": "8388608000"
+    "gpushare/resource_priority": "2"
+#    "gpushare/GPUID": ""
+    "gpushare/taskid": "default/virtualpod1"
+spec:
+  terminationGracePeriodSeconds: 0
+  containers:
+    - name: cuda
+      #      image: alinamj/cuda10.1-cudnn7-devel-ubuntu18.04-py3.6
+      image: wangzhuang12306/cuda10.0-cudnn7-devel-ubuntu16.04-py3.6-mxnetcu100:latest
+      imagePullPolicy: IfNotPresent
+#      command: ["sh", "-c", "nvidia-smi -L; sleep infinity"]
+      command: ["python"]
+      args: ["/home/mnist_single.py"]
+      volumeMounts:
+        - name: wz2
+          mountPath: /home
+      env:
+        # 获取pod ip,并赋值给容器内的环境变量POD_IP
+        - name: POD_IP
+          valueFrom:
+            fieldRef:
+              apiVersion: v1
+              fieldPath: status.podIP
+  volumes:
+    - name: wz2
+      hostPath:
+        path: /home/wz123456/vGPU/
+  NodeSelector:
+    kubernetes.io/hostname: gpu39

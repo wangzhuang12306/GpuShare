@@ -1,0 +1,34 @@
+
+---
+apiVersion: rbac.authorization.k8s.io/v1
+kind: ClusterRole
+metadata:
+  creationTimestamp: null
+  name: manager-role
+rules:
+- apiGroups:
+  - gpushare.imiss.gpushare
+  resources:
+  - virtualpods
+  verbs:
+  - create
+  - delete
+  - get
+  - list
+  - patch
+  - update
+  - watch
+- apiGroups:
+  - gpushare.imiss.gpushare
+  resources:
+  - virtualpods/finalizers
+  verbs:
+  - update
+- apiGroups:
+  - gpushare.imiss.gpushare
+  resources:
+  - virtualpods/status
+  verbs:
+  - get
+  - patch
+  - update

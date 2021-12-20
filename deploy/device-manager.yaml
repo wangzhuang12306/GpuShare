@@ -1,0 +1,139 @@
+apiVersion: v1
+kind: ServiceAccount
+metadata:
+  name: gpushare-device-manager
+  namespace: kube-system
+
+---
+
+kind: ClusterRole
+apiVersion: rbac.authorization.k8s.io/v1
+metadata:
+  name: gpushare-device-manager
+rules:
+- apiGroups: [""]
+  resources: ["*"]
+  verbs: ["*"]
+- apiGroups: ["gpushare.imiss.gpushare"]
+  resources: ["*"]
+  verbs: ["*"]
+
+---
+
+kind: ClusterRoleBinding
+apiVersion: rbac.authorization.k8s.io/v1
+metadata:
+  name: gpushare-device-manager
+subjects:
+- kind: ServiceAccount
+  name: gpushare-device-manager
+  namespace: kube-system
+roleRef:
+  kind: ClusterRole
+  name: gpushare-device-manager
+  apiGroup: rbac.authorization.k8s.io
+
+---
+
+apiVersion: v1
+kind: Service
+metadata:
+  name: gpushare-device-manager
+  namespace: kube-system
+spec:
+  type: ClusterIP
+  selector:
+    app: gpushare-device-manager
+  ports:
+  - name: controller
+    port: 9797
+    targetPort: 9797
+
+---
+
+apiVersion: v1
+kind: Pod
+metadata:
+  name: gpushare-device-manager
+  namespace: kube-system
+  annotations:
+    scheduler.alpha.kubernetes.io/critical-pod: ""
+  labels:
+    app: gpushare-device-manager
+spec:
+  serviceAccountName: gpushare-device-manager
+  priorityClassName: system-node-critical
+  tolerations:
+  - key: "CriticalAddonsOnly"
+    operator: "Exists"
+  - key: "node-role.kubernetes.io/master"
+    operator: "Exists"
+    effect: "NoSchedule"
+  affinity:
+    nodeAffinity:
+      requiredDuringSchedulingIgnoredDuringExecution:
+        nodeSelectorTerms:
+        - matchExpressions:
+          - key: "node-role.kubernetes.io/master"
+            operator: "Exists"
+  restartPolicy: Always
+  containers:
+  - name: gpushare-device-manager
+    image: wangzhuang12306/gpushare-vpod-manager:v1
+
+---
+
+apiVersion: apps/v1
+kind: DaemonSet
+metadata:
+  name: gpushare-node-daemon
+  namespace: kube-system
+  labels:
+    lsalab: gpushare-node-daemon
+spec:
+  selector:
+    matchLabels:
+      lsalab: gpushare-node-daemon
+  template:
+    metadata:
+      labels:
+        lsalab: gpushare-node-daemon
+    spec:
+      terminationGracePeriodSeconds: 0
+      restartPolicy: Always
+      tolerations:
+      - key: node-role.kubernetes.io/master
+        effect: NoSchedule
+      initContainers:
+      - name: gemini-hook-init
+#        image: ncy9371/kubeshare-gemini-hook-init:20200429135835
+        image: wangzhuang12306/gpushare-pitaya-hook-init:latest
+        imagePullPolicy: IfNotPresent
+        volumeMounts:
+        - name: "gpushare-library"
+          mountPath: /gpushare/library
+      containers:
+      - name: config-client
+        image: wangzhuang12306/gpushare-config-client:latest
+        volumeMounts:
+        - name: "gpushare-scheduler"
+          mountPath: "/gpushare/scheduler"
+        - name: "gpushare-library"
+          mountPath: "/gpushare/library"
+      - name: gemini-scheduler
+#        image: ncy9371/kubeshare-gemini-scheduler:20200429135835
+        image: wangzhuang12306/gpushare-pitaya-scheduler:v2
+        imagePullPolicy: IfNotPresent
+        volumeMounts:
+        - name: "gpushare-scheduler"
+          mountPath: "/gpushare/scheduler"
+        - name: "gpushare-library"
+          mountPath: "/gpushare/library"
+      volumes:
+      - name: "gpushare-scheduler"
+        hostPath:
+          path: "/gpushare/scheduler"
+      - name: "gpushare-library"
+        hostPath:
+          path: "/gpushare/library"
+

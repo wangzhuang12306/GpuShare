@@ -1,0 +1,14 @@
+apiVersion: apiextensions.k8s.io/v1beta1
+kind: CustomResourceDefinition
+metadata:
+    name: virtualpods.gpushare.imiss.gpushare  # 名字必需与下面的 spec 字段匹配，并且格式为 '<名称的复数形式>.<组名>'
+spec:
+    group: gpushare.imiss.gpushare   # 组名称，用于 REST API: /apis/<组>/<版本>
+    version: v1
+    scope: Namespaced
+    names:
+        plural: virtualpods
+        singular: virtualpod
+        kind: VirtualPod
+        shortNames:
+        - vtp
