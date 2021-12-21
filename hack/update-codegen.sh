@@ -21,7 +21,7 @@ set -o pipefail
 SCRIPT_ROOT=$(dirname "${BASH_SOURCE[0]}")/..
 CODEGEN_PKG=${SCRIPT_ROOT}/tools/code-generator
 
-MODULE=gpushare
+MODULE=github.com/wangzhuang12306/GpuShare
 GROUP_VERSION=gpushare:v1
 
 # generate the code with:

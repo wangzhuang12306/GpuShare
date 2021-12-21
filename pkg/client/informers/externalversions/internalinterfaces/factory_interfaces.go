@@ -18,9 +18,9 @@ limitations under the License.
 package internalinterfaces
 
 import (
-	versioned "gpushare/pkg/client/clientset/versioned"
 	time "time"
 
+	versioned "github.com/wangzhuang12306/GpuShare/pkg/client/clientset/versioned"
 	v1 "k8s.io/apimachinery/pkg/apis/meta/v1"
 	runtime "k8s.io/apimachinery/pkg/runtime"
 	cache "k8s.io/client-go/tools/cache"

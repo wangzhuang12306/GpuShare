@@ -18,8 +18,8 @@ limitations under the License.
 package gpushare
 
 import (
-	v1 "gpushare/pkg/client/informers/externalversions/gpushare/v1"
-	internalinterfaces "gpushare/pkg/client/informers/externalversions/internalinterfaces"
+	v1 "github.com/wangzhuang12306/GpuShare/pkg/client/informers/externalversions/gpushare/v1"
+	internalinterfaces "github.com/wangzhuang12306/GpuShare/pkg/client/informers/externalversions/internalinterfaces"
 )
 
 // Interface provides access to each of this group's versions.

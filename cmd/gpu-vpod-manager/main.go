@@ -31,10 +31,10 @@ import (
 	// Uncomment the following line to load the gcp plugin (only required to authenticate against GKE clusters).
 	// _ "k8s.io/client-go/plugin/pkg/client/auth/gcp"
 
-	clientset "gpushare/pkg/client/clientset/versioned"
-	informers "gpushare/pkg/client/informers/externalversions"
-	"gpushare/pkg/signals"
-	gpusharecontroller "gpushare/pkg/vpod_manager"
+	clientset "github.com/wangzhuang12306/GpuShare/pkg/client/clientset/versioned"
+	informers "github.com/wangzhuang12306/GpuShare/pkg/client/informers/externalversions"
+	"github.com/wangzhuang12306/GpuShare/pkg/signals"
+	gpusharecontroller "github.com/wangzhuang12306/GpuShare/pkg/vpod_manager"
 )
 
 var (

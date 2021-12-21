@@ -18,10 +18,9 @@ limitations under the License.
 package fake
 
 import (
-	clientset "gpushare/pkg/client/clientset/versioned"
-	gpusharev1 "gpushare/pkg/client/clientset/versioned/typed/gpushare/v1"
-	fakegpusharev1 "gpushare/pkg/client/clientset/versioned/typed/gpushare/v1/fake"
-
+	clientset "github.com/wangzhuang12306/GpuShare/pkg/client/clientset/versioned"
+	gpusharev1 "github.com/wangzhuang12306/GpuShare/pkg/client/clientset/versioned/typed/gpushare/v1"
+	fakegpusharev1 "github.com/wangzhuang12306/GpuShare/pkg/client/clientset/versioned/typed/gpushare/v1/fake"
 	"k8s.io/apimachinery/pkg/runtime"
 	"k8s.io/apimachinery/pkg/watch"
 	"k8s.io/client-go/discovery"

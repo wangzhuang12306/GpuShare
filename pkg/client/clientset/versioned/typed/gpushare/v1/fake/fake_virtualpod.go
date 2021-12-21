@@ -19,8 +19,8 @@ package fake
 
 import (
 	"context"
-	gpusharev1 "gpushare/api/gpushare/v1"
 
+	gpusharev1 "github.com/wangzhuang12306/GpuShare/api/gpushare/v1"
 	v1 "k8s.io/apimachinery/pkg/apis/meta/v1"
 	labels "k8s.io/apimachinery/pkg/labels"
 	schema "k8s.io/apimachinery/pkg/runtime/schema"

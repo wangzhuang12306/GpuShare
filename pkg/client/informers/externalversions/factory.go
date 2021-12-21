@@ -18,13 +18,13 @@ limitations under the License.
 package externalversions
 
 import (
-	versioned "gpushare/pkg/client/clientset/versioned"
-	gpushare "gpushare/pkg/client/informers/externalversions/gpushare"
-	internalinterfaces "gpushare/pkg/client/informers/externalversions/internalinterfaces"
 	reflect "reflect"
 	sync "sync"
 	time "time"
 
+	versioned "github.com/wangzhuang12306/GpuShare/pkg/client/clientset/versioned"
+	gpushare "github.com/wangzhuang12306/GpuShare/pkg/client/informers/externalversions/gpushare"
+	internalinterfaces "github.com/wangzhuang12306/GpuShare/pkg/client/informers/externalversions/internalinterfaces"
 	v1 "k8s.io/apimachinery/pkg/apis/meta/v1"
 	runtime "k8s.io/apimachinery/pkg/runtime"
 	schema "k8s.io/apimachinery/pkg/runtime/schema"

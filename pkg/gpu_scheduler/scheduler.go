@@ -5,7 +5,7 @@ import (
 	"math"
 	"sync"
 
-	gpusharev1 "gpushare/api/gpushare/v1"
+	gpusharev1 "github.com/wangzhuang12306/GpuShare/api/gpushare/v1"
 	corev1 "k8s.io/api/core/v1"
 )
 

@@ -18,8 +18,7 @@ limitations under the License.
 package scheme
 
 import (
-	gpusharev1 "gpushare/api/gpushare/v1"
-
+	gpusharev1 "github.com/wangzhuang12306/GpuShare/api/gpushare/v1"
 	v1 "k8s.io/apimachinery/pkg/apis/meta/v1"
 	runtime "k8s.io/apimachinery/pkg/runtime"
 	schema "k8s.io/apimachinery/pkg/runtime/schema"

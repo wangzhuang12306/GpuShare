@@ -19,8 +19,8 @@ package versioned
 
 import (
 	"fmt"
-	gpusharev1 "gpushare/pkg/client/clientset/versioned/typed/gpushare/v1"
 
+	gpusharev1 "github.com/wangzhuang12306/GpuShare/pkg/client/clientset/versioned/typed/gpushare/v1"
 	discovery "k8s.io/client-go/discovery"
 	rest "k8s.io/client-go/rest"
 	flowcontrol "k8s.io/client-go/util/flowcontrol"

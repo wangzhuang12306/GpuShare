@@ -18,8 +18,7 @@ limitations under the License.
 package fake
 
 import (
-	v1 "gpushare/pkg/client/clientset/versioned/typed/gpushare/v1"
-
+	v1 "github.com/wangzhuang12306/GpuShare/pkg/client/clientset/versioned/typed/gpushare/v1"
 	rest "k8s.io/client-go/rest"
 	testing "k8s.io/client-go/testing"
 )

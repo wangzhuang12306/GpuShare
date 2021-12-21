@@ -18,9 +18,8 @@ limitations under the License.
 package v1
 
 import (
-	v1 "gpushare/api/gpushare/v1"
-	"gpushare/pkg/client/clientset/versioned/scheme"
-
+	v1 "github.com/wangzhuang12306/GpuShare/api/gpushare/v1"
+	"github.com/wangzhuang12306/GpuShare/pkg/client/clientset/versioned/scheme"
 	rest "k8s.io/client-go/rest"
 )
 

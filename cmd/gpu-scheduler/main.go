@@ -15,10 +15,10 @@ import (
 	// Uncomment the following line to load the gcp plugin (only required to authenticate against GKE clusters).
 	// _ "k8s.io/client-go/plugin/pkg/client/auth/gcp"
 
-	clientset "gpushare/pkg/client/clientset/versioned"
-	informers "gpushare/pkg/client/informers/externalversions"
-	gpusharecontroller "gpushare/pkg/gpu_scheduler"
-	"gpushare/pkg/signals"
+	clientset "github.com/wangzhuang12306/GpuShare/pkg/client/clientset/versioned"
+	informers "github.com/wangzhuang12306/GpuShare/pkg/client/informers/externalversions"
+	gpusharecontroller "github.com/wangzhuang12306/GpuShare/pkg/gpu_scheduler"
+	"github.com/wangzhuang12306/GpuShare/pkg/signals"
 )
 
 var (

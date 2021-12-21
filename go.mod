@@ -1,4 +1,4 @@
-module gpushare
+module github.com/wangzhuang12306/GpuShare
 
 go 1.15
 

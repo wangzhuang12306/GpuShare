@@ -19,12 +19,12 @@ package v1
 
 import (
 	"context"
-	gpusharev1 "gpushare/api/gpushare/v1"
-	versioned "gpushare/pkg/client/clientset/versioned"
-	internalinterfaces "gpushare/pkg/client/informers/externalversions/internalinterfaces"
-	v1 "gpushare/pkg/client/listers/gpushare/v1"
 	time "time"
 
+	gpusharev1 "github.com/wangzhuang12306/GpuShare/api/gpushare/v1"
+	versioned "github.com/wangzhuang12306/GpuShare/pkg/client/clientset/versioned"
+	internalinterfaces "github.com/wangzhuang12306/GpuShare/pkg/client/informers/externalversions/internalinterfaces"
+	v1 "github.com/wangzhuang12306/GpuShare/pkg/client/listers/gpushare/v1"
 	metav1 "k8s.io/apimachinery/pkg/apis/meta/v1"
 	runtime "k8s.io/apimachinery/pkg/runtime"
 	watch "k8s.io/apimachinery/pkg/watch"

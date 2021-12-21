@@ -5,7 +5,7 @@ import (
 	"log"
 
 	"github.com/NVIDIA/gpu-monitoring-tools/bindings/go/nvml"
-	"gpushare/pkg/configclient"
+	"github.com/wangzhuang12306/GpuShare/pkg/configclient"
 	"k8s.io/klog/v2"
 )
 

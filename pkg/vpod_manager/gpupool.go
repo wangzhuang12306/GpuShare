@@ -16,8 +16,8 @@ import (
 	"k8s.io/apimachinery/pkg/labels"
 	"k8s.io/klog/v2"
 
-	gpusharev1 "gpushare/api/gpushare/v1"
-	"gpushare/pkg/lib/bitmap"
+	gpusharev1 "github.com/wangzhuang12306/GpuShare/api/gpushare/v1"
+	"github.com/wangzhuang12306/GpuShare/pkg/lib/bitmap"
 )
 
 var (

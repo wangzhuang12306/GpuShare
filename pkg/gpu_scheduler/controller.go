@@ -27,11 +27,11 @@ import (
 	"k8s.io/client-go/tools/record"
 	"k8s.io/client-go/util/workqueue"
 
-	gpusharev1 "gpushare/api/gpushare/v1"
-	clientset "gpushare/pkg/client/clientset/versioned"
-	gpusharescheme "gpushare/pkg/client/clientset/versioned/scheme"
-	informers "gpushare/pkg/client/informers/externalversions/gpushare/v1"
-	listers "gpushare/pkg/client/listers/gpushare/v1"
+	gpusharev1 "github.com/wangzhuang12306/GpuShare/api/gpushare/v1"
+	clientset "github.com/wangzhuang12306/GpuShare/pkg/client/clientset/versioned"
+	gpusharescheme "github.com/wangzhuang12306/GpuShare/pkg/client/clientset/versioned/scheme"
+	informers "github.com/wangzhuang12306/GpuShare/pkg/client/informers/externalversions/gpushare/v1"
+	listers "github.com/wangzhuang12306/GpuShare/pkg/client/listers/gpushare/v1"
 )
 
 const controllerAgentName = "gpushare-scheduler"

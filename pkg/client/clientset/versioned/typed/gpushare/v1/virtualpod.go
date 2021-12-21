@@ -19,10 +19,10 @@ package v1
 
 import (
 	"context"
-	v1 "gpushare/api/gpushare/v1"
-	scheme "gpushare/pkg/client/clientset/versioned/scheme"
 	"time"
 
+	v1 "github.com/wangzhuang12306/GpuShare/api/gpushare/v1"
+	scheme "github.com/wangzhuang12306/GpuShare/pkg/client/clientset/versioned/scheme"
 	metav1 "k8s.io/apimachinery/pkg/apis/meta/v1"
 	types "k8s.io/apimachinery/pkg/types"
 	watch "k8s.io/apimachinery/pkg/watch"

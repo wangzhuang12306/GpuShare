@@ -5,7 +5,7 @@
       <paths name="38">
         <serverdata>
           <mappings>
-            <mapping deploy="/gpushare" local="$PROJECT_DIR$" web="/" />
+            <mapping deploy="/modeltrain/github.com/GpuShare" local="$PROJECT_DIR$" web="/" />
           </mappings>
         </serverdata>
       </paths>
