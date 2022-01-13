@@ -20,7 +20,7 @@ func scheduleVirtualPod(isGPUPod bool, gpu_request float64, gpu_memory int64, re
 
 	nodeResources := syncClusterResources(nodeList, podList, virtualPodList) //同步集群资源，包括节点和pod、virtualpod资源
 
-	ResourcePriorityFilter(nodeResources, virtualpod, resource_priority)
+	ResourcePriorityFilter(nodeResources, virtualpod, resource_priority) //根据任务类型，过滤掉一些不满足要求的gpu
 
 
 	if resource_priority == 0{
@@ -85,7 +85,7 @@ func ResourcePriorityFilter(nodeResources NodeResources, virtualpod *gpusharev1.
 		}
 	}
 
-	if BesteffortTag != "" {
+	if BesteffortTag != "" { //要调度的任务为besteffort类型的任务时
 		for _, nodeRes := range nodeResources {
 			for GPUID, gpuInfo := range nodeRes.GpuFree {
 				flag1 := true
@@ -93,22 +93,22 @@ func ResourcePriorityFilter(nodeResources NodeResources, virtualpod *gpusharev1.
 				flag3 := true
 
 				if gpuInfo.ResourceBurstable != nil {
-					if gpuInfo.GPUFreeReq < 200 {
+					if gpuInfo.GPUFreeReq < 200 { //若gpu上有弹性任务，且剩余的gpu算力不足0.2，则过滤掉该gpu
 						flag2 = false
 					}
 				}
 				if gpuInfo.ResourceGuaranteed != nil {
-					if len(gpuInfo.ResourceBesteffort) >= 1 {
+					if len(gpuInfo.ResourceBesteffort) >= 1 {//若gpu上存在资源保证型任务，且besteffort任务数量大于等于1，则过滤掉该gpu
 						flag1 = false
 					}
 				}
 				if gpuInfo.ResourceBesteffort != nil {
-					if len(gpuInfo.ResourceBesteffort) >= 2 {
+					if len(gpuInfo.ResourceBesteffort) >= 2 {//若该gpu上的effort任务数量大于等于2，也过滤掉该gpu
 						flag3 = false
 					}
 				}
 
-				if (!flag1)||(!flag2)||(!flag3) {
+				if (!flag1)||(!flag2)||(!flag3) { //上述三个条件有一个不满足，均过滤掉该gpu
 					delete(nodeRes.GpuFree, GPUID) //
 				}
 			}
@@ -130,7 +130,8 @@ func ScheduleGuaranteedTask(isGPUPod bool, virtualpod *gpusharev1.VirtualPod, gp
 		GPUID:    "",
 	}
 	var bestNodeMux sync.Mutex
-	//尝试选择最优节点，哪个分数低选哪个
+
+	//选择最优节点，哪个分数低选哪个
 	tryBestNode := func(point int64, nodeName, GPUID string) {
 		bestNodeMux.Lock()
 		if point < bestNode.Point {
@@ -176,6 +177,7 @@ func ScheduleGuaranteedTask(isGPUPod bool, virtualpod *gpusharev1.VirtualPod, gp
 			klog.Infof("findTheHole == '%d' ， nodeRes.GpuFreeCount ==  '%d'",findTheHole , nodeRes.GpuFreeCount)
 			if !findTheHole {
 				if nodeRes.GpuFreeCount > 0 {
+					klog.Infof("Not find suitable gpu in gpuPool, now create a new vgpu!!!!!!")
 					tryBestNode(0, nodeName, gpusharev1.NewGPUID(5)) //选择并创建新的vGPU加入gpu pool，并赋予GPUID
 				}
 			}
@@ -240,11 +242,12 @@ func ScheduleBurstableTask(isGPUPod bool, gpu_request float64, gpu_mem int64, vi
 				if gpu.GPUFreeReq < gpu_request_millivalue || gpu.GPUFreeMem < gpu_mem {
 					continue
 				}//如果该GPU空闲资源小于请求的资源，则不选择该GPU
-				if gpu.ResourceBurstable != nil && gpu.ResourceBurstable != nil {
-					if (gpu.GPUFreeReq - gpu_request_millivalue) < 200 {
-						continue
-					}
-				}
+
+				//if gpu.ResourceBurstable != nil && gpu.ResourceBurstable != nil {
+				//	if (gpu.GPUFreeReq - gpu_request_millivalue) < 200 {
+				//		continue
+				//	}
+				//}
 
 				gpu_usage_cur :=  (gpu.GPUFreeReq - gpu_request_millivalue)/1000
 				gpu_mem_cur :=  (gpu.GPUFreeMem - gpu_mem)/nodeRes.GpuMemTotal
@@ -254,10 +257,11 @@ func ScheduleBurstableTask(isGPUPod bool, gpu_request float64, gpu_mem int64, vi
 
 				findTheHole = true
 				taskNum := len(gpu.ResourceBesteffort)
-				tryBestNode(int64((taskNum+1) * 100 + int(Balance)), nodeName, id)
+				tryBestNode(int64((taskNum+1) * 100+ int(gpu.GPUFreeReq-gpu_request_millivalue) + int(Balance)), nodeName, id)
 			}
 			if !findTheHole {
 				if nodeRes.GpuFreeCount > 0 {
+					klog.Infof("Not find suitable gpu in gpuPool, now create a new vgpu for Burstable Task !!!!!!")
 					tryBestNode(0, nodeName, gpusharev1.NewGPUID(5)) //选择并创建新的vGPU加入gpu pool，并赋予GPUID
 				}
 			}
@@ -331,12 +335,12 @@ func ScheduleBestEffortTask(isGPUPod bool, gpu_request float64, gpu_mem int64, v
 				taskNum := len(gpu.ResourceBesteffort)
 				if gpu.ResourceGuaranteed == nil && gpu.ResourceBurstable == nil {
 					tryBestNode(int64((taskNum+1) * 100 + int(Balance)), nodeName, id)
-				}
+				}//如果没有0型任务，也没有1型任务，则任务数量越少，将2调度到其上的可能性越大。
 				if gpu.ResourceGuaranteed == nil && gpu.ResourceBurstable != nil {
 					GPU_Free := gpu.GPUFreeReq
 					tryBestNode(int64((taskNum+1) * 100 + 1000 - int(GPU_Free)), nodeName, id)
-				}
-				if gpu.ResourceGuaranteed == nil && gpu.ResourceBurstable == nil {
+				}//如果没有0型任务，有1型任务，则剩余算力越多，将2调度到其上的可能性越大。
+				if gpu.ResourceGuaranteed != nil && gpu.ResourceBurstable == nil {
 					tryBestNode(int64((taskNum+1) * 100 + int(Balance) + 1000), nodeName, id)
 				}
 				findTheHole = true
@@ -347,6 +351,7 @@ func ScheduleBestEffortTask(isGPUPod bool, gpu_request float64, gpu_mem int64, v
 				}
 			}
 		} else {
+			klog.Infof("Not find suitable gpu in gpuPool, now create a new vgpu for BestEffort Task !!!!!!")
 			tryBestNode(nodeRes.CpuFree-cpuReqTotal, nodeName, "")
 		}
 		wait.Done()
